@@ -1,0 +1,15 @@
+<mujoco>
+    <option gravity="0 0 -9.8"/>
+    <worldbody>
+        <body name="ground">
+            <geom type="plane" size="10 10 0.1" rgba="0.5 0.5 0.5 1"/>
+        </body>
+        <body name="box" pos="0 0 0">
+            <geom type="box" size="0.5 0.5 0.5" rgba="1 0.6 0.6 1" solref="0.02 0" friction="1.1 0.005 0.0001"/>
+        </body>
+        <body name="ball" pos="0 0 5">
+            <joint type="free"/>
+            <geom type="sphere" size="0.25" rgba="1 1 1 1" mass="1" solref="0.02 0.5" friction="1.1 0.005 0.0001"/>
+        </body>
+    </worldbody>
+</mujoco>
