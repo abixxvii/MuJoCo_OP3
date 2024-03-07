@@ -3,4 +3,6 @@
  Whether it's a ball bouncing off a surface or a complex interplay between multiple objects, witness the nuanced behavior that arises from tweaking simulation parameters. 
  Uncover the secrets of MuJoCo's physics engine and gain insights into how small adjustments can lead to significant changes in simulated dynamics.
 
-Download MuJoCo from [https://github.com/google-deepmind/mujoco]
+Download MuJoCo from the [official GitHub repo.](https://github.com/google-deepmind/mujoco)
+Follow the [documentation.](https://mujoco.readthedocs.io/en/latest/overview.html)
+This [repo](https://github.com/google-deepmind/mujoco_menagerie) is a collection of high-quality models for the MuJoCo physics engine, curated by [Google DeepMind.](https://deepmind.google/)
