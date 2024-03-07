@@ -3,3 +3,4 @@
  Whether it's a ball bouncing off a surface or a complex interplay between multiple objects, witness the nuanced behavior that arises from tweaking simulation parameters. 
  Uncover the secrets of MuJoCo's physics engine and gain insights into how small adjustments can lead to significant changes in simulated dynamics.
 
+Download MuJoCo from [https://github.com/google-deepmind/mujoco]
