@@ -1,0 +1,12 @@
+<mujoco>
+<option timestep="0.001"/>
+<worldbody>
+<body name="table">
+<geom name="table" size="0.2 0.2 0.2" type="box" />
+</body>
+<body name="cylinder" pos="0 0 0.6">
+<geom rgba="0.4 0.8 0.4 1.0" size="0.1 0.01" type="cylinder" />
+<joint type="free" />
+</body>
+</worldbody>
+</mujoco>
