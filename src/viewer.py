@@ -41,7 +41,7 @@ def modify_ball_height(xml_file, new_height):
 modify_xml(r'C:\Users\abish\Desktop\MuJoCo files\Boxball\boxball.xml')
 
 # Modify the height of the ball
-modify_ball_height(r'C:\Users\abish\Desktop\MuJoCo files\Boxball\boxball.xml',15)  # Change the height as desired
+modify_ball_height(r'C:\Users\abish\Desktop\MuJoCo files\Boxball\boxball.xml', 15)  # Change the height as desired
 
 # Load the Mujoco model
 model = mujoco.MjModel.from_xml_path(r'C:\Users\abish\Desktop\MuJoCo files\Boxball\boxball.xml')
@@ -66,7 +66,36 @@ def get_object_linear_velocity(model, data, obj_id):
 # Simulate and render
 viewer = mujoco_viewer.MujocoViewer(model, data)
 
-# Store velocities over time
+# Define time steps at which to print velocities
+time_steps_to_print = [100, 500, 1000]
+
+# Store velocities at specified time steps
+velocities_at_time_steps = {}
+
+for step in range(1, 1001):
+    if viewer.is_alive:
+        mujoco.mj_step(model, data)  # Update data object before retrieving velocity
+        viewer.render()
+
+        if step in time_steps_to_print:
+            # Get velocities at the current time step
+            sphere_velocity = get_object_linear_velocity(model, data, sphere_id)
+            box_velocity = get_object_linear_velocity(model, data, box_id)
+            velocities_at_time_steps[step] = {'sphere': sphere_velocity, 'box': box_velocity}
+
+    else:
+        break
+
+viewer.close()
+
+# Print velocities at specified time steps
+for step, velocities in velocities_at_time_steps.items():
+    print(f"Time Step: {step}")
+    print("Sphere Velocity:", velocities['sphere'])
+    print("Box Velocity:", velocities['box'])
+    print()
+
+# Initialize lists to store velocities over time
 ball_velocities = []
 box_velocities = []
 
@@ -76,6 +105,14 @@ cor = 1.0
 # Initialize final_sphere_vel outside the loop
 final_sphere_vel = np.zeros(6)
 
+# Initialize collision flag
+collision_occurred = False
+
+# Get initial velocities
+initial_sphere_vel = get_object_linear_velocity(model, data, sphere_id)
+initial_box_vel = get_object_linear_velocity(model, data, box_id)
+
+# Run the simulation loop
 for _ in range(1000):
     if viewer.is_alive:
         mujoco.mj_step(model, data)  # Update data object before retrieving velocity
@@ -94,11 +131,16 @@ for _ in range(1000):
         relative_velocity_before = np.dot(initial_box_vel[:3] - initial_sphere_vel[:3], collision_direction)
 
         # Update coefficient of restitution based on collision
-        if relative_velocity_before != 0:
+        if relative_velocity_before != 0 and not collision_occurred:
             final_sphere_vel = get_object_linear_velocity(model, data, sphere_id)
             final_box_vel = get_object_linear_velocity(model, data, box_id)
             relative_velocity_after = np.dot(final_box_vel[:3] - final_sphere_vel[:3], collision_direction)
             cor = relative_velocity_after / relative_velocity_before
+            collision_occurred = True
+
+        # Reset collision flag
+        if collision_occurred and relative_velocity_before == 0:
+            collision_occurred = False
 
     else:
         break
