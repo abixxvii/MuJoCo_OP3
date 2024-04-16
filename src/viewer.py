@@ -14,7 +14,7 @@ def modify_xml(xml_file):
         if geom.attrib.get("name") == "box_geom":
             geom.attrib["solref"] = "0.02 1"  # Change solref value for box
         elif geom.attrib.get("name") == "ball_geom":
-            geom.attrib["solref"] = "0.02 1"  # Change solref value for ball
+            geom.attrib["solref"] = "0.02 2"  # Change solref value for ball
 
     tree.write(xml_file)
 
@@ -73,6 +73,9 @@ box_velocities = []
 # Initialize coefficient of restitution
 cor = 1.0
 
+# Initialize final_sphere_vel outside the loop
+final_sphere_vel = np.zeros(6)
+
 for _ in range(1000):
     if viewer.is_alive:
         mujoco.mj_step(model, data)  # Update data object before retrieving velocity
@@ -117,3 +120,29 @@ plt.show()
 
 # Print the coefficient of restitution
 print("Coefficient of Restitution:", cor)
+
+# Calculate the expected final velocity of the ball based on the coefficient of restitution
+expected_final_sphere_vel = initial_sphere_vel * cor
+
+# Print or log the expected and simulated final velocities
+print("Expected Final Sphere Velocity (m/s):")
+print(expected_final_sphere_vel)
+print("Simulated Final Sphere Velocity (m/s):")
+print(final_sphere_vel)
+
+# Compare the expected and simulated final velocities
+velocity_difference = np.linalg.norm(expected_final_sphere_vel - final_sphere_vel)
+print("Difference in Velocities (m/s):", velocity_difference)
+
+# Release height of the ball
+release_height = 15  # Input the release height in meters
+
+# Calculate the initial velocity using kinematic equations
+initial_velocity = np.sqrt(2 * 9.81 * release_height)
+
+# Calculate the expected final velocity using the coefficient of restitution
+expected_final_velocity = initial_velocity * cor
+
+# Print the calculated initial and expected final velocities
+print("Calculated Initial Velocity (m/s):", initial_velocity)
+print("Expected Final Velocity (m/s):", expected_final_velocity)
